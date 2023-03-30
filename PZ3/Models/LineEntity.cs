@@ -17,7 +17,6 @@ namespace PZ3.Models
         public List<PointEntity> Vertices { get; set; }
         public string Material { get; set; }
 
-
         public LineEntity()
         {
 

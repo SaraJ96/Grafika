@@ -14,7 +14,6 @@ namespace PZ3.Models
         public double Y { get; set; }
         public int ConnectionCounter { get; set; }
         public string Status { get; set; }
-
         public SwitchEntity()
         {
 

@@ -13,7 +13,6 @@ namespace PZ3.Models
         public double X { get; set; }
         public double Y { get; set; }
         public int ConnectionCounter { get; set; }
-
         public SubstationEntity()
         {
 

@@ -5,20 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PZ3"
         mc:Ignorable="d"
-        Title="MainWindow" Height="850" Width="1000" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="735.568" Width="1000" WindowStartupLocation="CenterScreen">
     <Grid>
-        <StackPanel Orientation="Horizontal" Height="40" Margin="10,0,10,769">
-            <ComboBox Width="300" Height="30" Margin="5" Name="izbor" 
+        <StackPanel Orientation="Horizontal" Height="40" Margin="100,30,95,635">
+            <ComboBox Width="300" Height="40" Margin="5" x:Name="izbor" 
                       SelectionChanged="Izbor_SelectionChanged"/>
             <CheckBox x:Name="aktivanDeo" Margin="10" Checked="AktivanDeoMreze" 
-                      Unchecked="AktivanDeoMreze" Content="Sakriti Aktivan deo mreze" />
+                      Unchecked="AktivanDeoMreze" Content="Hide Active part of network" />
         </StackPanel>
-        
+
         <Viewport3D ClipToBounds="True"  Name="scena" MouseLeftButtonDown="Scena_MouseLeftButtonDown"
                      MouseLeftButtonUp="Scena_MouseLeftButtonUp" MouseMove="Scena_MouseMove"
                      MouseWheel="Scena_MouseWheel" MouseRightButtonDown="Scena_MouseRightButtonDown" 
-                     MouseDown="Scena_MouseDown">
-            
+                     MouseDown="Scena_MouseDown" Margin="46,179,50,43">
+
             <Viewport3D.Camera>
                 <PerspectiveCamera Position = "1,0.90,3" LookDirection = "0,0,-1"/>
             </Viewport3D.Camera>
@@ -27,7 +27,6 @@
 
                 <ModelVisual3D>
                     <ModelVisual3D.Content>
-                        <!--<AmbientLight></AmbientLight>-->
                         <DirectionalLight x:Name = "dirLightMain" Direction = "0,-1,-1"/>
                     </ModelVisual3D.Content>
 
@@ -74,8 +73,11 @@
                     </ModelVisual3D.Content>
                 </ModelVisual3D>
             </Viewport3D.Children>
+
+
+
         </Viewport3D>
-        
-        
+
+
     </Grid>
 </Window>

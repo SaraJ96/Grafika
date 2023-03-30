@@ -8,10 +8,8 @@ namespace PZ3.Models
 {
     public class PointEntity
     {
-
         public double X { get; set; }
         public double Y { get; set; }
-
         public PointEntity()
         {
 

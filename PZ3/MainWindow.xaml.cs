@@ -28,33 +28,52 @@ namespace PZ3
         Dictionary<long, LineEntity> Lines = new Dictionary<long, LineEntity>();
         Dictionary<long, NodeEntity> Nodes = new Dictionary<long, NodeEntity>();
         Dictionary<long, SwitchEntity> Switches = new Dictionary<long, SwitchEntity>();
+       
         Dictionary<GeometryModel3D, long> AllEntities = new Dictionary<GeometryModel3D, long>();
+       
         public ObservableCollection<string> UserOptions = new ObservableCollection<string>()
         {
             "Kompletan prikaz",
-            "Prikazi cvorove sa konekcijama od 0 do 3", "Prikazi cvorove sa konekcijama od 3 do 5", "Prikazi cvorove sa konekcijama vecim od 5",
-            "Sakrijte cvorove sa konekcijama od 0 do 3", "Sakrijte cvorove sa konekcijama od 3 do 5", "Sakrijte cvorove sa konekcijama vecim od 5",
-            "Prikazi vodove sa otpornostima od 0 do 1", "Prikazi vodove sa otpornostima od 1 do 2", "Prikazi vodove sa otpornostima vecim od 2",
-            "Sakrijte vodove sa otpornostima od 0 do 1", "Sakrijte vodove sa otpornostima od 1 do 2", "Sakrijte vodove sa otpornostima vecim od 2",
+            "Prikazivanje objekata: konekcije od 0 do 3",
+            "Prikazivanje objekata: konekcije od 3 do 5",
+            "Prikazivanje objekata: konekcije vece od 5",
+            "Sakrivanje objekata: konekcije od 0 do 3",
+            "Sakrivanje objekata: konekcije od 3 do 5",
+            "Sakrivanje objekata: konekcije vece od 5",
+
+            "Prikazivanje vodova: otpornost od 0 do 1",
+            "Prikazivanje vodova: otpornost od 1 do 2",
+            "Prikazivanje vodova: otpornost veca od 2",
+            "Sakrivanje vodova: otpornost od 0 do 1",
+            "Sakrivanje vodova: otpornost od 1 do 2",
+            "Sakrivanje vodova: otpornost veca od 2",
+
         };
 
-        // donji levi ugao mape lat: 45,2325, lon: 19.793909,
-        // gornji desni lat: 45,277031, lon: 19.894459. 
 
-        double minX = 45.2325, maxX = 45.277031, minY = 19.793909, maxY = 19.894459;
+        double minX = 45.2325;
+        double maxX = 45.277031;
+        double minY = 19.793909;
+        double maxY = 19.894459;
 
+        public double newX;
+        public double newY;
 
-        public double newX, newY;
         private Point startCoordinates = new Point();
         private Point diffOffset = new Point();
         private Point startRotation = new Point();
+
         private int CurrentZoom = 1;
         private int MaxZoom = 30;
+
         private double squareSize = 0.02;
         private double lineSize = 0.015;
+
         public Int32Collection IndiciesObjects = new Int32Collection()
         { 2, 3, 1, 2, 1, 0, 7, 1, 3, 7, 5, 1, 6, 5, 7, 6, 4, 5, 6, 2, 4, 2, 0, 4, 2, 7, 3, 2, 6, 7, 0, 1, 5, 0, 5, 4 };
+       
         GeometryModel3D affectedEntity = null;
+      
         long lineStartNodeID = -1;
         long lineEndNodeID = -1;
         int lineStartNodeType = -1;
@@ -74,7 +93,8 @@ namespace PZ3
 
         public void CrtajCvorove()
         {
-            double imageX, imageY;
+            double imageX;
+            double imageY;
             int floorCounter = 0;
 
             foreach (SubstationEntity s in Substations.Values)
@@ -92,9 +112,7 @@ namespace PZ3
                 }
 
                 Mapa.Children.Add(substation);
-
                 AllEntities.Add(substation, s.ID);
-
                 floorCounter = 0;
             }
 
@@ -113,10 +131,7 @@ namespace PZ3
                 }
 
                 Mapa.Children.Add(node);
-
-                //SviEntiteti.Add(n.ID,node);
                 AllEntities.Add(node, n.ID);
-
                 floorCounter = 0; //restart za sledeci node, a kad zavrsi foreach restartovan ce biti za sledeci Cvor-SWITCH;
             }
 
@@ -134,10 +149,7 @@ namespace PZ3
                 }
 
                 Mapa.Children.Add(sw);
-
-                //SviEntiteti.Add(s.ID,sw);
                 AllEntities.Add(sw, s.ID);
-
                 floorCounter = 0; //restart za sledeci switch, a kad zavrsi foreach ovaj brojac se nece koristiti :)
 
             }
@@ -194,7 +206,7 @@ namespace PZ3
             if (tip == 0)
                 node.Material = new DiffuseMaterial(Brushes.Black);
             else if (tip == 1)
-                node.Material = new DiffuseMaterial(Brushes.Lime);
+                node.Material = new DiffuseMaterial(Brushes.Green);
             else if (tip == 2)
                 node.Material = new DiffuseMaterial(Brushes.Blue);
 
@@ -571,14 +583,14 @@ namespace PZ3
                 if (lineStartNodeType == 0)
                     AllEntities.FirstOrDefault(x => x.Value == lineStartNodeID).Key.Material = new DiffuseMaterial(Brushes.Black);
                 else if (lineStartNodeType == 1)
-                    AllEntities.FirstOrDefault(x => x.Value == lineStartNodeID).Key.Material = new DiffuseMaterial(Brushes.Lime); 
+                    AllEntities.FirstOrDefault(x => x.Value == lineStartNodeID).Key.Material = new DiffuseMaterial(Brushes.Green); 
                 else if (lineStartNodeType == 2)
                     AllEntities.FirstOrDefault(x => x.Value == lineStartNodeID).Key.Material = new DiffuseMaterial(Brushes.Blue);
 
                 if (lineEndNodeType == 0)
                     AllEntities.FirstOrDefault(x => x.Value == lineEndNodeID).Key.Material = new DiffuseMaterial(Brushes.Black);
                 else if (lineEndNodeType == 1)
-                    AllEntities.FirstOrDefault(x => x.Value == lineEndNodeID).Key.Material = new DiffuseMaterial(Brushes.Lime); 
+                    AllEntities.FirstOrDefault(x => x.Value == lineEndNodeID).Key.Material = new DiffuseMaterial(Brushes.Green); 
                 else if (lineEndNodeType == 2)
                     AllEntities.FirstOrDefault(x => x.Value == lineEndNodeID).Key.Material = new DiffuseMaterial(Brushes.Blue); 
             }
@@ -683,18 +695,42 @@ namespace PZ3
             CompleteView();
             switch (izbor.SelectedItem)
             {
-                case "Prikazi cvorove sa konekcijama od 0 do 3": ShowHideKnots(true, 0); break;
-                case "Prikazi cvorove sa konekcijama od 3 do 5": ShowHideKnots(true, 1); break;
-                case "Prikazi cvorove sa konekcijama vecim od 5": ShowHideKnots(true, 2); break;
-                case "Sakrijte cvorove sa konekcijama od 0 do 3": ShowHideKnots(false, 0); break;
-                case "Sakrijte cvorove sa konekcijama od 3 do 5": ShowHideKnots(false, 1); break;
-                case "Sakrijte cvorove sa konekcijama vecim od 5": ShowHideKnots(false, 2); break;
-                case "Prikazi vodove sa otpornostima od 0 do 1": ShowHideLines(true, 0); break;
-                case "Prikazi vodove sa otpornostima od 1 do 2": ShowHideLines(true, 1); break;
-                case "Prikazi vodove sa otpornostima vecim od 2": ShowHideLines(true, 2); break;
-                case "Sakrijte vodove sa otpornostima od 0 do 1": ShowHideLines(false, 0); break;
-                case "Sakrijte vodove sa otpornostima od 1 do 2": ShowHideLines(false, 1); break;
-                case "Sakrijte vodove sa otpornostima vecim od 2": ShowHideLines(false, 2); break;
+                case "Prikazivanje objekata: konekcije od 0 do 3":
+                    ShowHideKnots(true, 0);
+                    break;
+                case "Prikazivanje objekata: konekcije od 3 do 5":
+                    ShowHideKnots(true, 1);
+                    break;
+                case "Prikazivanje objekata: konekcije vece od 5":
+                    ShowHideKnots(true, 2);
+                    break;
+                case "Sakrivanje objekata: konekcije od 0 do 3":
+                    ShowHideKnots(false, 0);
+                    break;
+                case "Sakrivanje objekata: konekcije od 3 do 5":
+                    ShowHideKnots(false, 1);
+                    break;
+                case "Sakrivanje objekata: konekcije vece od 5":
+                    ShowHideKnots(false, 2);
+                    break;
+                case "Prikazivanje vodova: otpornost od 0 do 1":
+                    ShowHideLines(true, 0);
+                    break;
+                case "Prikazivanje vodova: otpornost od 1 do 2":
+                    ShowHideLines(true, 1);
+                    break;
+                case "Prikazivanje vodova: otpornost veca od 2":
+                    ShowHideLines(true, 2);
+                    break;
+                case "Sakrivanje vodova: otpornost od 0 do 1":
+                    ShowHideLines(false, 0);
+                    break;
+                case "Sakrivanje vodova: otpornost od 1 do 2":
+                    ShowHideLines(false, 1);
+                    break;
+                case "Sakrivanje vodova: otpornost veca od 2":
+                    ShowHideLines(false, 2);
+                    break;
                 default: break;
             }
         }
