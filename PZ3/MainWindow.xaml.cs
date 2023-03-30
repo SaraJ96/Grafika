@@ -162,18 +162,12 @@ namespace PZ3
                 Point3DCollection coordinates = (item.Geometry as MeshGeometry3D).Positions;
 
                 if (coordinates[0].X == elementCoord[0].X && coordinates[0].Y == elementCoord[0].Y && coordinates[0].Z == elementCoord[0].Z)
-                    //prvi slucaj da se u potpunosti kocke poklapaju, ako im je ista prva tacka [0], svaka sledeca se isto poklapa, jer su sve kocke istih dimenzija
                     return true;
 
-                // provera za presecanje kocki
-                // nemam min i max Z jer je visina svake kocke definisana sa squareSize, dakle uvek je ista vrednost za Z
-                // uslov ide kako se ne bi proveravale one kocke koje su na razlicitm 'spratovima'
-                if (coordinates[0].Z == elementCoord[0].Z)
+               if (coordinates[0].Z == elementCoord[0].Z)
                 {
-                    //  kreiranje pravougaonika na osnovu dijagonalnih tacaka tj. max i min vrednosti za X i Y koordinate kocke
                     Rect r1 = new Rect(new Point(elementCoord[0].X, elementCoord[0].Y), new Point(elementCoord[3].X, elementCoord[3].Y));
                     Rect r2 = new Rect(new Point(coordinates[0].X, coordinates[0].Y), new Point(coordinates[3].X, coordinates[3].Y));
-                    //provera presecanja Donjih kvadrata kocke, jer ako se oni seku, postoji presecanje, jer su  kocke fiksirane Z koordinatom na mapu.
                     Rect r3 = Rect.Intersect(r1, r2); //vraca empty ako nema presecanja
 
                     if (r3 != Rect.Empty)
@@ -334,7 +328,6 @@ namespace PZ3
                 ToLatLon(n.X, n.Y, 34, out newX, out newY);
                 n.X = newX;
                 n.Y = newY;
-                //provera da li je u granicama slike koja predstavlja mapu;
                 if (n.X < minX || n.X > maxX || n.Y < minY || n.Y > maxY)
                     continue;
 
@@ -355,7 +348,6 @@ namespace PZ3
                 ToLatLon(s.X, s.Y, 34, out newX, out newY);
                 s.X = newX;
                 s.Y = newY;
-                //provera da li je u granicama slike koja predstavlja mapu;
                 if (s.X < minX || s.X > maxX || s.Y < minY || s.Y > maxY)
                     continue;
 
@@ -391,7 +383,6 @@ namespace PZ3
                     p.X = newX;
                     p.Y = newY;
 
-                    //provera da li je Vertices u granicama slike koja predstavlja mapu;
                     if (p.X < minX || p.X > maxX || p.Y < minY || p.Y > maxY)
                         continue;
 
@@ -532,15 +523,7 @@ namespace PZ3
                 double offsetX = end.X - startRotation.X;
                 double offsetY = end.Y - startRotation.Y;
 
-                // offset/2 smanjimo pomeraj sam, da se pomera za malo ali glatko
-                // *(-1) jer u xaml-u si stavio da rotira oko x ose u negativnom smeru
-                // pa da se prilikom pomeraja misa u desnu stranu i mapa pomeri u desnu, da nema *(-1),
-                // islo bi -> mis desno mapa levo i obrnuto (mis levo mapa desno)
-
-                //AngleRotationX.Angle += offsetY/2;
-                //AngleRotationY.Angle += (offsetX/2) * (-1);
-
-                ////da mapa ne nestane priliko rotacije
+             
                 if ((AngleRotationX.Angle + (offsetY / 2) < 87 && AngleRotationX.Angle + (offsetY / 2) > -71))
                     AngleRotationX.Angle += offsetY/2;
 
@@ -550,8 +533,7 @@ namespace PZ3
                 startRotation = end;
             }
             else if (e.MiddleButton == MouseButtonState.Released)
-                // da ne bezi kada pomeris mapu i onda odes na skroz drugi kraj i malo samo pomeris mis -> mapa se drasticno zarotira
-                // ovo bi trebalo da je fix za taj 'problem'
+             
                 startRotation = new Point();
         }
 
@@ -621,7 +603,6 @@ namespace PZ3
                 {
                     affectedEntity = (GeometryModel3D)rayResult.ModelHit;
                 }
-                //ako ne pogodis ni jedan entitet koji se nalazi u sviEntitet, tj. ako kliknes na mapu gde nema ni cvora ni voda
                 if (affectedEntity == null) return HitTestResultBehavior.Stop;
 
                 long Id = AllEntities[affectedEntity]; 
@@ -748,16 +729,7 @@ namespace PZ3
 
         private void ShowHideKnots(bool prikaz, int opcija)
         {
-            //parametar 'prikaz' predstavlja izbor korisnika tj. da li je korisnik izabrao prikaz ili sakrivanje
-            //vrednosti -> true, false
-            // ture  - prikaz cvorova za izabrani opseg
-            // false - sakrivanje cvorova za izabrani opseg
-            //
-            //parametar 'opcija' predstavlja koji opseg konekcija uzimamo
-            //vrednosti -> 0,1,2
-            // 0 - uzimamo cvorove sa konekcijama od 0 do 3
-            // 1 - uzimamo cvorove sa konekcijama od 3 do 5
-            // 2 - uzimamo cvorove sa konekcijama veci od 5
+           
 
             foreach (KeyValuePair<GeometryModel3D, long> entitetSaMape in AllEntities)
             {
@@ -867,7 +839,7 @@ namespace PZ3
                     }
                     else
                     {
-                        //treba sakriti
+                       
                         if (opcija == 0)
                         {
                             if (Switches[entitetSaMape.Value].ConnectionCounter <= 3)
@@ -891,16 +863,7 @@ namespace PZ3
 
         private void ShowHideLines(bool prikaz, int opcija)
         {
-            //parametar 'prikaz' predstavlja izbor korisnika tj. da li je korisnik izabrao prikaz ili sakrivanje
-            //vrednosti -> true, false
-            // ture  - prikaz cvorova za izabrani opseg
-            // false - sakrivanje cvorova za izabrani opseg
-            //
-            //parametar 'opcija' predstavlja koji opseg otpornosti uzimamo
-            //vrednosti -> 0,1,2
-            // 0 - uzimamo vodove sa otpornostima od 0 do 1
-            // 1 - uzimamo vodove sa otpornostima od 1 do 2
-            // 2 - uzimamo vodove sa otpornostima veci od 2
+           
 
             foreach (KeyValuePair<GeometryModel3D, long> entitetSaMape in AllEntities)
             {
@@ -926,7 +889,7 @@ namespace PZ3
                     }
                     else
                     {
-                        //treba sakriti
+                      
                         if (opcija == 0)
                         {
                             if (Lines[entitetSaMape.Value].Resistance < 1)
